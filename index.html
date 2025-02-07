@@ -17,16 +17,16 @@
             background: url('back.png') no-repeat center center/cover;
             font-family: 'Pretendard', sans-serif;
             text-align: center;
-            overflow: hidden; /* Запрещает прокрутку */
-            touch-action: none; /* Блокирует жесты приближения */
+            overflow: hidden;
+            touch-action: none;
             position: relative;
         }
         h1 {
-            font-weight: 700; /* Pretendard Black */
-            font-size: 95px; /* Увеличенный размер */
+            font-weight: 700;
+            font-size: 95px;
             margin: 0;
             position: relative;
-            z-index: 2; /* Выше слоем, чем видео */
+            z-index: 2;
         }
         .ring-container {
             width: 500px;
@@ -35,21 +35,28 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            top: -90px; /* Подняли кольцо чуть выше центра */
+            top: -90px;
             z-index: 1;
+        }
+        .overlay-text {
+            position: absolute;
+            bottom: 270px;
+            font-size: 16px;
+            font-weight: 500;
+            z-index: 3;
         }
         .bottom-section {
             position: absolute;
-            bottom: 20px;
+            bottom: 50px;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 10px;
         }
-        p {
-            font-weight: 500; /* Pretendard Medium */
+        .countdown {
             font-size: 18px;
-            margin: 170px;
+            font-weight: 700;
+            margin-top: 10px;
         }
         .invite-btn {
             padding: 18px 60px;
@@ -59,7 +66,7 @@
             border: none;
             cursor: pointer;
             border-radius: 15px;
-            font-weight: 700; /* Pretendard Bold */
+            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 5px;
@@ -71,15 +78,16 @@
     </style>
 </head>
 <body>
-    <h1>7 DAYS</h1>
+    <h1>SOON...</h1>
     <div class="ring-container">
         <video autoplay loop muted playsinline width="250" height="250">
             <source src="ring.mp4" type="video/mp4">
             Ваш браузер не поддерживает видео.
         </video>
     </div>
+    <div class="overlay-text">@rings_app</div>
     <div class="bottom-section">
-        <p>@rings_app</p>
+        <div class="countdown" id="countdown">0 days 0 hours 0 minutes 0 seconds</div>
         <button class="invite-btn" onclick="inviteFriends()">
             Invite friends (+250<img src="rings.png" alt="Ring">)
         </button>
@@ -88,6 +96,23 @@
         function inviteFriends() {
             alert('Invite friends feature coming soon!');
         }
+        function updateCountdown() {
+            const targetDate = new Date('February 14, 2025 00:00:00').getTime();
+            const now = new Date().getTime();
+            const timeLeft = targetDate - now;
+            
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                document.getElementById('countdown').innerText = `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
+            } else {
+                document.getElementById('countdown').innerText = '0 days 0 hours 0 minutes 0 seconds';
+            }
+        }
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
     </script>
 </body>
 </html>
