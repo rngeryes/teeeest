@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rings App</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: black;
+            color: white;
+            font-family: 'Pretendard', sans-serif;
+            text-align: center;
+        }
+        h1 {
+            font-weight: 900; /* Pretendard Black */
+        }
+        p {
+            font-weight: 500; /* Pretendard Medium */
+        }
+        .ring-container {
+            width: 150px;
+            height: 150px;
+        }
+        .invite-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            background-color: white;
+            color: black;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: 700; /* Pretendard Bold */
+        }
+    </style>
+</head>
+<body>
+    <h1>? DAYS</h1>
+    <div class="ring-container">
+        <video autoplay loop muted playsinline width="150" height="150">
+            <source src="ring.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+    </div>
+    <p>@rings_app</p>
+    <button class="invite-btn" onclick="inviteFriends()">Invite friends (+250💍)</button>
+    <script>
+        function inviteFriends() {
+            alert('Invite friends feature coming soon!');
+        }
+    </script>
+</body>
+</html>
