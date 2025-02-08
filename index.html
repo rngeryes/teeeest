@@ -7,14 +7,33 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;600&display=swap');
-        
+
+        :root {
+            --background: #F2F2F7;
+            --container-bg: white;
+            --text-color: black;
+            --border-color: #E5E5EA;
+            --button-bg: #D1D1D6;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --background: #1C1C1E;
+                --container-bg: #2C2C2E;
+                --text-color: white;
+                --border-color: #3A3A3C;
+                --button-bg: #444;
+            }
+        }
+
         body {
             font-family: 'SF Pro Display', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #F2F2F7;
-            color: #000;
+            background-color: var(--background);
+            color: var(--text-color);
             display: flex;
+            overflow: hidden;
             flex-direction: column;
             height: 100vh;
             justify-content: space-between;
@@ -24,7 +43,7 @@
         .container {
             width: 100%;
             max-width: 400px;
-            background-color: white;
+            background-color: var(--container-bg);
             border-radius: 12px;
             overflow: hidden;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -35,8 +54,8 @@
             display: flex;
             align-items: center;
             padding: 16px;
-            background: white;
-            border-bottom: 1px solid #E5E5EA;
+            background: var(--container-bg);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .avatar {
@@ -54,12 +73,12 @@
 
         .spacer {
             height: 16px;
-            background: #F2F2F7;
+            background: var(--background);
         }
 
         .section {
             margin-top: 10px;
-            background: white;
+            background: var(--container-bg);
             border-radius: 12px;
             overflow: hidden;
         }
@@ -69,12 +88,30 @@
             align-items: center;
             justify-content: space-between;
             padding: 12px 16px;
-            border-bottom: 1px solid #E5E5EA;
-            cursor: pointer;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .item:last-child {
             border-bottom: none;
+        }
+
+        .centered-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .task-button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            border: none;
+            background: var(--button-bg);
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
         .bottom-nav {
@@ -83,7 +120,7 @@
             width: 100%;
             max-width: 400px;
             padding: 12px 0;
-            background: #E5E5EA;
+            background: var(--border-color);
             position: fixed;
             bottom: 0;
         }
@@ -92,10 +129,11 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: #D1D1D6;
+            background: var(--button-bg);
             display: flex;
             align-items: center;
             justify-content: center;
+            cursor: pointer;
         }
 
         .hidden {
@@ -112,17 +150,17 @@
         <div class="spacer"></div>
         <div class="section">
             <div class="item">
-                <div class="text">Wi-Fi</div>
-                <div class="text" id="stars">0 ⭐</div>
+                <span>Wi-Fi</span>
+                <span id="stars">0 ⭐</span>
             </div>
         </div>
     </div>
-    
+
     <div class="container hidden" id="tasksPage">
         <div class="section">
-            <div class="item" onclick="openCommunity()">
+            <div class="centered-item">
                 <div class="text">Join our Telegram community</div>
-                <button onclick="event.stopPropagation(); completeTask();">Claim 1000 ⭐</button>
+                <button class="task-button" onclick="openCommunity()">Claim 1000 ⭐</button>
             </div>
         </div>
     </div>
@@ -139,9 +177,10 @@
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
+
         document.getElementById("username").textContent = tg.initDataUnsafe?.user?.first_name || "Guest";
         document.getElementById("avatar").src = tg.initDataUnsafe?.user?.photo_url || "default-avatar.png";
-        
+
         let stars = parseInt(localStorage.getItem("stars")) || 0;
         document.getElementById("stars").textContent = `${stars} ⭐`;
 
@@ -152,7 +191,8 @@
         }
 
         function openCommunity() {
-            window.location.href = "https://t.me/rings_app";
+            window.open("https://t.me/rings_app", "_blank");
+            completeTask();
         }
 
         function showPage(page) {
@@ -160,6 +200,26 @@
             document.getElementById("tasksPage").classList.add("hidden");
             document.getElementById(`${page}Page`).classList.remove("hidden");
         }
+
+        function applyTheme() {
+            let theme = tg.colorScheme;
+            if (theme === "dark") {
+                document.documentElement.style.setProperty('--background', '#1C1C1E');
+                document.documentElement.style.setProperty('--container-bg', '#2C2C2E');
+                document.documentElement.style.setProperty('--text-color', 'white');
+                document.documentElement.style.setProperty('--border-color', '#3A3A3C');
+                document.documentElement.style.setProperty('--button-bg', '#444');
+            } else {
+                document.documentElement.style.setProperty('--background', '#F2F2F7');
+                document.documentElement.style.setProperty('--container-bg', 'white');
+                document.documentElement.style.setProperty('--text-color', 'black');
+                document.documentElement.style.setProperty('--border-color', '#E5E5EA');
+                document.documentElement.style.setProperty('--button-bg', '#D1D1D6');
+            }
+        }
+
+        tg.onEvent("themeChanged", applyTheme);
+        applyTheme();
     </script>
 </body>
 </html>
