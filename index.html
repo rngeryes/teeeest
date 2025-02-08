@@ -2,117 +2,164 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Rings App</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=SF+Pro+Display:wght@400;600&display=swap');
+        
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 90vh;
-            background-color: black;
-            color: white;
-            background: url('back.png') no-repeat center center/cover;
-            font-family: 'Pretendard', sans-serif;
-            text-align: center;
-            overflow: hidden;
-            touch-action: none;
-            position: relative;
-        }
-        h1 {
-            font-weight: 700;
-            font-size: 95px;
+            font-family: 'SF Pro Display', sans-serif;
             margin: 0;
-            position: relative;
-            z-index: 2;
+            padding: 0;
+            background-color: #F2F2F7;
+            color: #000;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: space-between;
+            align-items: center;
         }
-        .ring-container {
-            width: 500px;
-            height: 500px;
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding-bottom: 20px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: white;
+            border-bottom: 1px solid #E5E5EA;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: gray;
+            margin-right: 12px;
+        }
+
+        .username {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .spacer {
+            height: 16px;
+            background: #F2F2F7;
+        }
+
+        .section {
+            margin-top: 10px;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            border-bottom: 1px solid #E5E5EA;
+            cursor: pointer;
+        }
+
+        .item:last-child {
+            border-bottom: none;
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 0;
+            background: #E5E5EA;
+            position: fixed;
+            bottom: 0;
+        }
+
+        .nav-item {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #D1D1D6;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            top: -90px;
-            z-index: 1;
         }
-        .overlay-text {
-            position: absolute;
-            bottom: 270px;
-            font-size: 16px;
-            font-weight: 500;
-            z-index: 3;
-        }
-        .bottom-section {
-            position: absolute;
-            bottom: 50px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-        .countdown {
-            font-size: 18px;
-            font-weight: 700;
-            margin-top: 10px;
-        }
-        .invite-btn {
-            padding: 18px 60px;
-            font-size: 18px;
-            background-color: white;
-            color: black;
-            border: none;
-            cursor: pointer;
-            border-radius: 15px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .invite-btn img {
-            width: 20px;
-            height: 20px;
+
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <h1>SOON...</h1>
-    <div class="ring-container">
-        <video autoplay loop muted playsinline width="250" height="250">
-            <source src="ring.mp4" type="video/mp4">
-            Ваш браузер не поддерживает видео.
-        </video>
+    <div class="container" id="profilePage">
+        <div class="profile">
+            <img class="avatar" id="avatar" src="" alt="Avatar">
+            <div class="username" id="username">Loading...</div>
+        </div>
+        <div class="spacer"></div>
+        <div class="section">
+            <div class="item">
+                <div class="text">Wi-Fi</div>
+                <div class="text" id="stars">0 ⭐</div>
+            </div>
+        </div>
     </div>
-    <div class="overlay-text">@rings_app</div>
-    <div class="bottom-section">
-        <div class="countdown" id="countdown">0 days 0 hours 0 minutes 0 seconds</div>
-        <button class="invite-btn" onclick="inviteFriends()">
-            Invite friends (+250<img src="rings.png" alt="Ring">)
-        </button>
+    
+    <div class="container hidden" id="tasksPage">
+        <div class="section">
+            <div class="item" onclick="openCommunity()">
+                <div class="text">Join our Telegram community</div>
+                <button onclick="event.stopPropagation(); completeTask();">Claim 1000 ⭐</button>
+            </div>
+        </div>
     </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="showPage('profile')">
+            <img src="profile.png" width="24" height="24">
+        </div>
+        <div class="nav-item" onclick="showPage('tasks')">
+            <img src="tasks.png" width="24" height="24">
+        </div>
+    </div>
+
     <script>
-        function inviteFriends() {
-            alert('Invite friends feature coming soon!');
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        document.getElementById("username").textContent = tg.initDataUnsafe?.user?.first_name || "Guest";
+        document.getElementById("avatar").src = tg.initDataUnsafe?.user?.photo_url || "default-avatar.png";
+        
+        let stars = parseInt(localStorage.getItem("stars")) || 0;
+        document.getElementById("stars").textContent = `${stars} ⭐`;
+
+        function completeTask() {
+            stars += 1000;
+            localStorage.setItem("stars", stars);
+            document.getElementById("stars").textContent = `${stars} ⭐`;
         }
-        function updateCountdown() {
-            const targetDate = new Date('February 14, 2025 00:00:00').getTime();
-            const now = new Date().getTime();
-            const timeLeft = targetDate - now;
-            
-            if (timeLeft > 0) {
-                const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                document.getElementById('countdown').innerText = `${days} days ${hours} hours ${minutes} minutes ${seconds} seconds`;
-            } else {
-                document.getElementById('countdown').innerText = '0 days 0 hours 0 minutes 0 seconds';
-            }
+
+        function openCommunity() {
+            window.location.href = "https://t.me/rings_app";
         }
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
+
+        function showPage(page) {
+            document.getElementById("profilePage").classList.add("hidden");
+            document.getElementById("tasksPage").classList.add("hidden");
+            document.getElementById(`${page}Page`).classList.remove("hidden");
+        }
     </script>
 </body>
 </html>
